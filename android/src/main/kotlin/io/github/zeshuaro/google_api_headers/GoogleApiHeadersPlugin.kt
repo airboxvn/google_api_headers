@@ -34,30 +34,7 @@ class GoogleApiHeadersPlugin : MethodCallHandler, FlutterPlugin {
     @UiThread
     override fun onMethodCall(call: MethodCall, result: Result) {
         if (call.method == "getSigningCertSha1") {
-            try {
-                val packageManager = context!!.packageManager
-                val args = call.arguments<String>()!!
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
-                    packageManager.getPackageInfo(
-                        args,
-                        PackageManager.GET_SIGNING_CERTIFICATES
-                    ).signingInfo.apkContentsSigners.forEach { signature ->
-                        parseSignature(
-                            signature,
-                            result
-                        )
-                    }
-                } else {
-                    @Suppress("DEPRECATION")
-                    packageManager.getPackageInfo(
-                        args,
-                        PackageManager.GET_SIGNATURES
-                    ).signatures.forEach { signature -> parseSignature(signature, result) }
-                }
-
-            } catch (e: Exception) {
-                result.error("ERROR", e.toString(), null)
-            }
+           
         } else {
             result.notImplemented()
         }
